@@ -1,6 +1,6 @@
 # Geofence Automation Framework
 
-Production-ready mobile automation framework demonstrating senior-level architecture, AI integration, and cross-platform geofence testing.
+Production-ready mobile automation framework, and cross-platform geofence testing.
 
 ## Framework Highlights
 
@@ -19,7 +19,6 @@ Production-ready mobile automation framework demonstrating senior-level architec
 - Java 17+
 - Maven 3.9+ (or use included `./mvnw` wrapper)
 - BrowserStack account
-- Claude Code CLI (for AI features)
 
 ### Setup
 
