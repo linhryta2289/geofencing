@@ -11,7 +11,6 @@ Production-ready mobile automation framework demonstrating senior-level architec
 | **API** | RestAssured 5.5.0 + WireMock |
 | **Reporting** | Allure 2.29.0 |
 | **CI/CD** | Jenkins Declarative Pipeline |
-| **AI Integration** | GitHub Copilot + Claude Code + Atlassian MCP |
 
 ## Quick Start
 
@@ -111,22 +110,6 @@ Single configuration instance shared across framework.
 ### ThreadLocal (DriverManager)
 Thread-safe driver storage for parallel execution.
 
-## AI-Augmented Features
-
-### GitHub Copilot
-- Used throughout development for code generation
-- Instructions defined in `.github/copilot-instructions.md`
-
-### Atlassian MCP Integration
-- Auto-create Xray defects from test failures
-- Traceability: Test Case → Test Execution → Bug
-- Setup guide: `docs/mcp-config.md`
-
-### Claude Code
-- Code review and refactoring
-- MCP-powered Jira integration
-- Defect creation script: `scripts/create-xray-defects.sh`
-
 ## CI/CD Pipeline
 
 ```
@@ -174,27 +157,6 @@ BUILD_TAG={BUILD_NUMBER}-{timestamp}
    app.ios.path=bs://YOUR_IOS_APP_ID
    app.android.path=bs://YOUR_ANDROID_APP_ID
    ```
-
-## Documentation
-
-| Document | Location |
-|----------|----------|
-| Documentation Index | `docs/INDEX.md` |
-| Project Overview & PDR | `docs/project-overview-pdr.md` |
-| Codebase Summary | `docs/codebase-summary.md` |
-| Code Standards | `docs/code-standards.md` |
-| System Architecture | `docs/system-architecture.md` |
-| CI/CD Pipeline | `docs/cicd-pipeline.md` |
-| Reporting Guide | `docs/reporting-guide.md` |
-| MCP Setup | `docs/mcp-config.md` |
-| Quick Reference | `docs/QUICK-REFERENCE.md` |
-| Copilot Instructions | `.github/copilot-instructions.md` |
-
-## Security
-
-- Never commit real credentials
-- Use environment variables for sensitive data
-- `.gitignore` excludes `.properties` files (except examples)
 
 ## License
 
