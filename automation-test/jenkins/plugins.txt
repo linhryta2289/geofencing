@@ -1,0 +1,30 @@
+# Core Pipeline
+workflow-aggregator:latest
+pipeline-stage-view:latest
+pipeline-build-step:latest
+pipeline-model-definition:latest
+
+# Git Integration
+git:latest
+github:latest
+github-branch-source:latest
+
+# Credentials Management
+credentials-binding:latest
+plain-credentials:latest
+
+# Test Reporting
+allure-jenkins-plugin:latest
+junit:latest
+
+# UI/UX Enhancements
+ansicolor:latest
+timestamper:latest
+build-timeout:latest
+
+# Configuration as Code
+configuration-as-code:latest
+job-dsl:latest
+
+# Utilities
+ws-cleanup:latest

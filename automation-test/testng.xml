@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Geofence Automation Suite" parallel="false">
+    <listeners>
+        <listener class-name="com.poc.geofence.base.TestListener"/>
+    </listeners>
+
+    <test name="API Tests">
+        <classes>
+            <class name="com.poc.geofence.api.GeofenceApiTest"/>
+        </classes>
+    </test>
+
+    <!-- User Journey: Exit (TC-003) then Entry (TC-004) -->
+    <test name="Android E2E Tests - User Journey">
+        <parameter name="platform" value="android"/>
+        <classes>
+            <class name="com.poc.geofence.e2e.GeofenceExitTest">
+                <methods>
+                    <include name="testAndroidGeofenceExit"/>
+                </methods>
+            </class>
+            <class name="com.poc.geofence.e2e.GeofenceEntryTest">
+                <methods>
+                    <include name="testAndroidGeofenceEntry"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- User Journey: Exit (TC-001) then Entry (TC-002) -->
+    <test name="iOS E2E Tests - User Journey">
+        <parameter name="platform" value="ios"/>
+        <classes>
+            <class name="com.poc.geofence.e2e.GeofenceExitTest">
+                <methods>
+                    <include name="testIOSGeofenceExit"/>
+                </methods>
+            </class>
+            <class name="com.poc.geofence.e2e.GeofenceEntryTest">
+                <methods>
+                    <include name="testIOSGeofenceEntry"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

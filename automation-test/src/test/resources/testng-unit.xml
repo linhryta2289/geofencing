@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Unit Tests" parallel="none">
+    <test name="Config Tests">
+        <classes>
+            <class name="com.poc.geofence.config.PlatformTypeTest"/>
+            <class name="com.poc.geofence.config.EnvironmentTest"/>
+            <class name="com.poc.geofence.config.ConfigManagerTest"/>
+        </classes>
+    </test>
+    <test name="Driver Tests">
+        <classes>
+            <class name="com.poc.geofence.driver.DriverManagerTest"/>
+        </classes>
+    </test>
+</suite>

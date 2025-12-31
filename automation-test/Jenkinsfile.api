@@ -1,0 +1,87 @@
+// Jenkinsfile.api - API Tests Pipeline
+// Geofence Automation - API Tests Only (Mock/Staging/UAT)
+pipeline {
+    agent any
+
+    parameters {
+        choice(
+            name: 'ENV',
+            choices: ['mock', 'dev', 'test', 'uat', 'prod'],
+            description: 'Environment: mock (WireMock), dev, test, uat, or prod'
+        )
+    }
+
+    environment {
+        JIRA_BASE_URL = credentials('jira-base-url')
+        JIRA_USERNAME = credentials('jira-username')
+        JIRA_API_TOKEN = credentials('jira-api-token')
+        API_BASE_URL_STAGING = credentials('api-base-url-staging')
+        API_BASE_URL_UAT = credentials('api-base-url-uat')
+        API_AUTH_TOKEN = credentials('api-auth-token')
+        MAVEN_OPTS = '-Xmx1024m'
+    }
+
+    options {
+        timeout(time: 15, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        ansiColor('xterm')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                dir('/workspace/poc/automation-test') {
+                    echo '========== Building API Test Project =========='
+                    sh './mvnw compile -q'
+                }
+            }
+        }
+
+        stage('API Tests') {
+            steps {
+                dir('/workspace/poc/automation-test') {
+                    script {
+                        def testGroup = params.ENV == 'mock' ? 'mock-api' : 'real-api'
+                        echo "========== Running API Tests (${params.ENV}, group: ${testGroup}) =========="
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            sh """
+                                ./mvnw test -DsuiteXml=testng-api.xml \
+                                    -Dgroups=${testGroup} \
+                                    -Dapi.mode=${params.ENV} \
+                                    -Djira.enabled=true \
+                                    -Djira.create.defects.on.failure=true \
+                                    -Dallure.results.directory=target/allure-results
+                            """
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    dir('/workspace/poc/automation-test') {
+                        junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+                    }
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            dir('/workspace/poc/automation-test') {
+                echo '========== Generating Allure Report =========='
+                allure includeProperties: true, jdk: '', reportBuildPolicy: 'ALWAYS',
+                       results: [[path: 'target/allure-results']]
+            }
+            cleanWs cleanWhenSuccess: true
+        }
+        success {
+            echo '========== API Tests SUCCESSFUL =========='
+        }
+        failure {
+            echo '========== API Tests FAILED =========='
+        }
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Jenkins",
+  "type": "jenkins",
+  "url": "${BUILD_URL}",
+  "buildOrder": "${BUILD_NUMBER}",
+  "buildName": "Geofence-${BUILD_TAG}",
+  "buildUrl": "${BUILD_URL}",
+  "reportUrl": "${BUILD_URL}allure",
+  "reportName": "Allure Report"
+}

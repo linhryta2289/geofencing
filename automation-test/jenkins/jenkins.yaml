@@ -1,0 +1,132 @@
+# Jenkins Configuration as Code (JCasC)
+# Reference: https://github.com/jenkinsci/configuration-as-code-plugin
+# All credentials and jobs pre-configured via environment variables
+
+jenkins:
+  systemMessage: "Geofence Automation - Jenkins CI/CD (Ready to Use)"
+  numExecutors: 2
+  mode: NORMAL
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          name: "Administrator"
+          password: "${JENKINS_ADMIN_PASSWORD:-admin}"
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: "MAVEN_HOME"
+            value: "/opt/maven"
+          - key: "ALLURE_HOME"
+            value: "/opt/allure"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          # BrowserStack
+          - string:
+              scope: GLOBAL
+              id: "browserstack-username"
+              secret: "${BROWSERSTACK_USERNAME:-placeholder}"
+              description: "BrowserStack Username"
+          - string:
+              scope: GLOBAL
+              id: "browserstack-access-key"
+              secret: "${BROWSERSTACK_ACCESS_KEY:-placeholder}"
+              description: "BrowserStack Access Key"
+          # Jira
+          - string:
+              scope: GLOBAL
+              id: "jira-base-url"
+              secret: "${JIRA_BASE_URL:-https://your-domain.atlassian.net}"
+              description: "Jira Base URL"
+          - string:
+              scope: GLOBAL
+              id: "jira-username"
+              secret: "${JIRA_USERNAME:-placeholder}"
+              description: "Jira Username"
+          - string:
+              scope: GLOBAL
+              id: "jira-api-token"
+              secret: "${JIRA_API_TOKEN:-placeholder}"
+              description: "Jira API Token"
+          # API Endpoints
+          - string:
+              scope: GLOBAL
+              id: "api-base-url-staging"
+              secret: "${API_BASE_URL_STAGING:-https://api-staging.example.com}"
+              description: "API Base URL (Staging)"
+          - string:
+              scope: GLOBAL
+              id: "api-base-url-uat"
+              secret: "${API_BASE_URL_UAT:-https://api-uat.example.com}"
+              description: "API Base URL (UAT)"
+          - string:
+              scope: GLOBAL
+              id: "api-base-url-prod"
+              secret: "${API_BASE_URL_PROD:-https://api.example.com}"
+              description: "API Base URL (Prod)"
+          - string:
+              scope: GLOBAL
+              id: "api-auth-token"
+              secret: "${API_AUTH_TOKEN:-placeholder}"
+              description: "API Auth Token"
+
+jobs:
+  - script: >
+      pipelineJob('geofence-api-test') {
+        description('Geofence API Tests - Mock/Staging/UAT')
+        definition {
+          cps {
+            script(new File('/workspace/poc/automation-test/Jenkinsfile.api').text)
+            sandbox(true)
+          }
+        }
+      }
+  - script: >
+      pipelineJob('geofence-e2e-test-android') {
+        description('Geofence Android E2E Tests - BrowserStack/Local')
+        definition {
+          cps {
+            script(new File('/workspace/poc/automation-test/Jenkinsfile.android').text)
+            sandbox(true)
+          }
+        }
+      }
+  - script: >
+      pipelineJob('geofence-e2e-test-ios') {
+        description('Geofence iOS E2E Tests - BrowserStack/Local')
+        definition {
+          cps {
+            script(new File('/workspace/poc/automation-test/Jenkinsfile.ios').text)
+            sandbox(true)
+          }
+        }
+      }
+
+unclassified:
+  location:
+    url: "http://localhost:8080/"
+    adminAddress: "admin@localhost"
+
+tool:
+  allure:
+    installations:
+      - name: "allure"
+        home: "/opt/allure"
+  jdk:
+    installations:
+      - name: "JDK17"
+        home: "/opt/java/openjdk"
+  maven:
+    installations:
+      - name: "Maven3"
+        home: "/opt/maven"

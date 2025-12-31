@@ -1,0 +1,16 @@
+# BrowserStack Configuration
+# IMPORTANT: Use environment variables for credentials - never commit real values
+browserstack.username=${BROWSERSTACK_USERNAME}
+browserstack.accesskey=${BROWSERSTACK_ACCESS_KEY}
+browserstack.hub=https://hub.browserstack.com/wd/hub
+
+# Build Configuration
+browserstack.build=Geofence-POC-${BUILD_NUMBER}
+browserstack.project=Geofence-Automation
+
+# Session Options
+browserstack.local=false
+browserstack.networkLogs=true
+browserstack.debug=true
+browserstack.video=true
+browserstack.consoleLogs=info

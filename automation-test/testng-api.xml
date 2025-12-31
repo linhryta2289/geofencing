@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+    Mock API Test Suite (default)
+    Runs tests using WireMock for mocking.
+    Usage: mvn test -DsuiteXml=testng-api.xml
+-->
+<suite name="API Test Suite">
+    <test name="Geofence API Tests">
+        <groups>
+            <run>
+                <include name="mock-api"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.poc.geofence.api.GeofenceApiTest"/>
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jenkins-geofence
+    restart: unless-stopped
+    ports:
+      - "${JENKINS_PORT:-8080}:8080"
+      - "${JENKINS_AGENT_PORT:-50000}:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - maven_cache:/root/.m2
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Mount local project for Jenkinsfile access (read-write for Maven builds)
+      - ${PROJECT_PATH:-/Users/soanguyen/Development/poc}:/workspace/poc
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false -Xmx1024m
+      # BrowserStack credentials read from browserstack.properties file in workspace
+      # (not passed as env vars to avoid override issues)
+      - JIRA_BASE_URL=${JIRA_BASE_URL}
+      - JIRA_USERNAME=${JIRA_USERNAME}
+      - JIRA_API_TOKEN=${JIRA_API_TOKEN}
+      - API_BASE_URL_STAGING=${API_BASE_URL_STAGING}
+      - API_BASE_URL_UAT=${API_BASE_URL_UAT}
+      - API_BASE_URL_PROD=${API_BASE_URL_PROD}
+      - API_AUTH_TOKEN=${API_AUTH_TOKEN}
+      - JENKINS_ADMIN_PASSWORD=${JENKINS_ADMIN_PASSWORD:-admin}
+    networks:
+      - jenkins-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/login"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  jenkins_home:
+    name: jenkins-geofence-data
+  maven_cache:
+    name: jenkins-maven-cache
+
+networks:
+  jenkins-net:
+    name: jenkins-geofence-net

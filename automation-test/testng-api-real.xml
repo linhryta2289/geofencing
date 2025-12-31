@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+    Real API Test Suite
+    Runs tests against staging/uat/prod environments.
+    Requires env vars: API_BASE_URL_*, API_AUTH_TOKEN
+    Usage: mvn test -DsuiteXml=testng-api-real.xml -Dapi.mode=staging
+-->
+<suite name="Real API Test Suite">
+    <test name="Geofence Real API Tests">
+        <groups>
+            <run>
+                <include name="real-api"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.poc.geofence.api.GeofenceApiTest"/>
+        </classes>
+    </test>
+</suite>

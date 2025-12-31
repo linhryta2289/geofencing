@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Geofence Trigger Failures",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*[Gg]eofence.*"
+  },
+  {
+    "name": "Location Accuracy Issues",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*[Ll]ocation.*"
+  },
+  {
+    "name": "Notification Capture Failures",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*[Nn]otification.*"
+  },
+  {
+    "name": "API Failures",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*API.*|.*status.*"
+  },
+  {
+    "name": "Infrastructure Issues",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*[Tt]imeout.*|.*[Cc]onnection.*|.*BrowserStack.*"
+  },
+  {
+    "name": "Test Defects",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*AssertionError.*"
+  }
+]

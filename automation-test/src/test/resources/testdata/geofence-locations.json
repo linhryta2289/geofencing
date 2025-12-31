@@ -1,0 +1,28 @@
+{
+  "locations": {
+    "bonn_center": {
+      "latitude": 50.7333,
+      "longitude": 7.1032,
+      "description": "Android app default center"
+    },
+    "bonn_exit": {
+      "latitude": 50.7358,
+      "longitude": 7.1032,
+      "description": "250m north of center - triggers exit"
+    },
+    "ahmedabad_mi": {
+      "latitude": 23.057582,
+      "longitude": 72.534458,
+      "description": "iOS app default MI location"
+    },
+    "ahmedabad_exit": {
+      "latitude": 23.060082,
+      "longitude": 72.534458,
+      "description": "250m north - triggers exit"
+    }
+  },
+  "geofence": {
+    "radius": 200,
+    "exit_distance": 250
+  }
+}

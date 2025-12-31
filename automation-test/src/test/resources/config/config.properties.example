@@ -1,0 +1,24 @@
+# Core Configuration
+environment=browserstack
+platform=android
+default.timeout=30
+geofence.wait.timeout=120
+
+# App Paths (BrowserStack App IDs)
+app.ios.path=bs://YOUR_IOS_APP_ID
+app.android.path=bs://YOUR_ANDROID_APP_ID
+
+# API Configuration
+api.base.url=http://localhost:8080
+api.timeout=10000
+
+# Jira Integration Configuration
+# Set to true to enable automatic defect creation on test failures
+jira.enabled=false
+jira.create.defects.on.failure=false
+jira.project=GEOFENCE
+
+# Required Environment Variables for Jira REST API:
+# JIRA_BASE_URL=https://your-domain.atlassian.net
+# JIRA_USERNAME=your-email@example.com
+# JIRA_API_TOKEN=your-api-token

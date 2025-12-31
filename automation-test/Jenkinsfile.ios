@@ -1,0 +1,92 @@
+// Jenkinsfile.ios - iOS E2E Tests Pipeline
+// Geofence Automation - iOS E2E Tests (BrowserStack)
+pipeline {
+    agent any
+
+    parameters {
+        choice(
+            name: 'ENV',
+            choices: ['mock', 'dev', 'test', 'uat', 'prod'],
+            description: 'Environment: mock (WireMock), dev, test, uat, or prod'
+        )
+    }
+
+    environment {
+        // BrowserStack credentials read from browserstack.properties file
+        // (mounted from local workspace via docker-compose volume)
+        JIRA_BASE_URL = credentials('jira-base-url')
+        JIRA_USERNAME = credentials('jira-username')
+        JIRA_API_TOKEN = credentials('jira-api-token')
+        // API credentials (only needed for staging/uat modes)
+        API_BASE_URL_STAGING = credentials('api-base-url-staging')
+        API_BASE_URL_UAT = credentials('api-base-url-uat')
+        API_AUTH_TOKEN = credentials('api-auth-token')
+        MAVEN_OPTS = '-Xmx1024m'
+    }
+
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        disableConcurrentBuilds()
+        timestamps()
+        ansiColor('xterm')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                dir('/workspace/poc/automation-test') {
+                    echo '========== Building iOS Test Project =========='
+                    sh './mvnw compile -q'
+                }
+            }
+        }
+
+        stage('iOS E2E Tests') {
+            steps {
+                dir('/workspace/poc/automation-test') {
+                    echo "========== Running iOS E2E Tests (browserstack, ENV: ${params.ENV}) =========="
+                    sh """
+                        ./mvnw test -Dplatform=ios \
+                            -Denvironment=browserstack \
+                            -Dapi.mode=${params.ENV} \
+                            -DsuiteXml=testng-ios.xml \
+                            -Dbrowserstack.build=Geofence-${env.BUILD_NUMBER} \
+                            -Djira.enabled=true \
+                            -Djira.create.defects.on.failure=true \
+                            -Dallure.results.directory=target/allure-results
+                    """
+                }
+            }
+            post {
+                always {
+                    dir('/workspace/poc/automation-test') {
+                        junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+                    }
+                }
+            }
+        }
+
+        stage('Report') {
+            steps {
+                dir('/workspace/poc/automation-test') {
+                    echo '========== Generating Allure Report =========='
+                    allure includeProperties: true, jdk: '', reportBuildPolicy: 'ALWAYS',
+                           results: [[path: 'target/allure-results']]
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs cleanWhenSuccess: true
+        }
+        success {
+            echo '========== iOS E2E Tests SUCCESSFUL =========='
+        }
+        failure {
+            echo '========== iOS E2E Tests FAILED =========='
+        }
+    }
+}
