@@ -1,0 +1,46 @@
+# Maven
+automation-test/target/
+automation-test/pom.xml.tag
+automation-test/pom.xml.releaseBackup
+automation-test/pom.xml.versionsBackup
+automation-test/pom.xml.next
+automation-test/release.properties
+automation-test/dependency-reduced-pom.xml
+automation-test/buildNumber.properties
+automation-test/.mvn/timing.properties
+automation-test/.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+automation-test/.idea/
+automation-test/*.iml
+automation-test/*.ipr
+automation-test/*.iws
+automation-test/.project
+automation-test/.classpath
+automation-test/.settings/
+automation-test/.vscode/
+automation-test/*.swp
+automation-test/*.swo
+
+# Credentials - NEVER commit these
+automation-test/*.properties
+automation-test/!config.properties.example
+automation-test/!browserstack.properties.example
+automation-test/!allure.properties
+
+# Allure
+automation-test/allure-results/
+automation-test/allure-report/
+
+# OS
+automation-test/.DS_Store
+automation-test/Thumbs.db
+
+# Logs
+automation-test/plans/
+automation-test/*.log
+automation-test/logs/
+
+# Test outputs
+automation-test/test-output/
+automation-test/screenshots/

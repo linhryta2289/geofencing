@@ -11,9 +11,9 @@ RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
 # Switch to root for tool installation
 USER root
 
-# Install Maven (using Apache archive for stable URL)
+# Install Maven from Maven Central repository mirror
 ARG MAVEN_VERSION=3.9.9
-RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+RUN curl -fsSL --retry 3 --retry-delay 5 https://repo1.maven.org/maven2/org/apache/maven/apache-maven/${MAVEN_VERSION}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
     | tar xzf - -C /opt \
     && ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven \
     && ln -s /opt/maven/bin/mvn /usr/local/bin/mvn
